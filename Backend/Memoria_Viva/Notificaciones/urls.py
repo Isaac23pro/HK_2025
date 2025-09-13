@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from .views import NotificacionListCreateView, NotificacionRetrieveUpdateDestroyView
 
 urlpatterns = [
-    # Aquí se agregarán los endpoints de Notificaciones
+    path('notificaciones/', NotificacionListCreateView.as_view(), name='notificacion-list-create'),
+    path('notificaciones/<int:pk>/', NotificacionRetrieveUpdateDestroyView.as_view(), name='notificacion-detail'),
 ]
