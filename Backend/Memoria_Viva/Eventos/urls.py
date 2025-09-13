@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from .views import EventoListCreateView, EventoRetrieveUpdateDestroyView
 
 urlpatterns = [
-    # Aquí se agregarán los endpoints de Eventos
+    path('eventos/', EventoListCreateView.as_view(), name='evento-list-create'),
+    path('eventos/<int:pk>/', EventoRetrieveUpdateDestroyView.as_view(), name='evento-detail'),
 ]
