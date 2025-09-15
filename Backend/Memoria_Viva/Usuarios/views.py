@@ -32,6 +32,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Usuario
 from .serializers import UsuarioSerializer
+from Memoria_Viva.logging_config import logger
 
 
 # Vista para listar y crear usuarios
@@ -49,7 +50,10 @@ class UsuarioListCreateView(generics.ListCreateAPIView):
 		"""
 		Crea un nuevo usuario. El password debe venir hasheado desde el frontend por seguridad.
 		"""
-		return super().create(request, *args, **kwargs)
+		response = super().create(request, *args, **kwargs)
+		if response.status_code == 201:
+			logger.info(f"Usuario creado: {response.data.get('nombre_usuario', '')} por {request.user}")
+		return response
 
 # Vista para obtener, actualizar o eliminar un usuario específico
 # NOTA: Para lógica avanzada de permisos por rol, usar IsAdmin, IsModerator, IsOwnerOrReadOnly
@@ -61,3 +65,12 @@ class UsuarioRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 		if self.request.method == 'GET':
 			return [permissions.AllowAny()]
 		return [permissions.IsAuthenticated()]
+
+	def perform_update(self, serializer):
+		instance = serializer.save()
+		logger.info(f"Usuario editado: {instance.nombre_usuario} por {self.request.user}")
+		return instance
+
+	def perform_destroy(self, instance):
+		logger.info(f"Usuario eliminado: {instance.nombre_usuario} por {self.request.user}")
+		return super().perform_destroy(instance)

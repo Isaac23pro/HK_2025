@@ -4,8 +4,10 @@ from django.shortcuts import render
 
 from rest_framework import generics, permissions
 from Usuarios.permissions import IsAdmin, IsModerator, IsOwnerOrReadOnly
+from Memoria_Viva.logging_config import logger
 from .models import Memoria, Medio, ComentarioMemoria, ReaccionMemoria
 from .serializers import MemoriaSerializer, MedioSerializer, ComentarioMemoriaSerializer, ReaccionMemoriaSerializer
+
 
 # CRUD para Memorias
 class MemoriaListCreateView(generics.ListCreateAPIView):
@@ -17,6 +19,24 @@ class MemoriaListCreateView(generics.ListCreateAPIView):
 			return [permissions.AllowAny()]
 		return [permissions.IsAuthenticated()]
 
+	def perform_create(self, serializer):
+		instance = serializer.save()
+		logger.info(f"Memoria creada: {instance.titulo} por {self.request.user}")
+		return instance
+
+	def perform_update(self, serializer):
+		instance = serializer.save()
+		logger.info(f"Memoria editada: {instance.titulo} por {self.request.user}")
+		return instance
+
+	def perform_destroy(self, instance):
+		logger.info(f"Memoria eliminada: {instance.titulo} por {self.request.user}")
+		return super().perform_destroy(instance)
+
+	def perform_destroy(self, instance):
+		logger.info(f"Memoria eliminada: {instance.titulo} por {self.request.user}")
+		return super().perform_destroy(instance)
+
 class MemoriaRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Memoria.objects.all()
 	serializer_class = MemoriaSerializer
@@ -25,6 +45,14 @@ class MemoriaRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 		if self.request.method == 'GET':
 			return [permissions.AllowAny()]
 		return [permissions.IsAuthenticated()]
+	def perform_update(self, serializer):
+		instance = serializer.save()
+		logger.info(f"Memoria editada: {instance.titulo} por {self.request.user}")
+		return instance
+
+	def perform_destroy(self, instance):
+		logger.info(f"Memoria eliminada: {instance.titulo} por {self.request.user}")
+		return super().perform_destroy(instance)
 
 # CRUD para Medios
 class MedioListCreateView(generics.ListCreateAPIView):

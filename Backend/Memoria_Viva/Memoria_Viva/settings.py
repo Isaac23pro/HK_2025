@@ -61,7 +61,10 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# Application definition
+
+# Configuración de logging para auditoría
+import os
+from Memoria_Viva.logging_config import logger
 
 INSTALLED_APPS = [
     'django.contrib.admin',
