@@ -8,6 +8,7 @@ class CategoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categoria
         fields = '__all__'
+        ref_name = 'MemoriasCategoria'
 
 # Serializador para Memoria
 class MemoriaSerializer(serializers.ModelSerializer):

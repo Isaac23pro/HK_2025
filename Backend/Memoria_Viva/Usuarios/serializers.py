@@ -7,12 +7,14 @@ class RolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rol
         fields = '__all__'
+        ref_name = 'UsuariosRol'
 
 # Serializer para el modelo Localizacion
 class LocalizacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Localizacion
         fields = '__all__'
+        ref_name = 'UsuariosLocalizacion'
 
 # Serializer para el modelo Usuario
 class UsuarioSerializer(serializers.ModelSerializer):
