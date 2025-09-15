@@ -12,3 +12,8 @@ class EventoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evento
         fields = '__all__'
+
+    def validate_nombre_evento(self, value):
+        if not value or len(value) < 5:
+            raise serializers.ValidationError("El nombre del evento debe tener al menos 5 caracteres.")
+        return value

@@ -9,3 +9,8 @@ class NotificacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notificacion
         fields = '__all__'
+
+    def validate_mensaje(self, value):
+        if not value or len(value) < 5:
+            raise serializers.ValidationError("El mensaje debe tener al menos 5 caracteres.")
+        return value

@@ -34,7 +34,22 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Memoria Viva Nicaragua API",
         default_version='v1',
-        description="API para la aplicación educativa Memoria Viva Nicaragua",
+        description="""
+        API para la aplicación educativa Memoria Viva Nicaragua.
+
+        **Permisos:**
+        - La mayoría de los endpoints requieren autenticación JWT (Bearer Token).
+        - Solo usuarios autenticados pueden crear, editar o borrar recursos.
+        - La lectura (GET) es pública para la mayoría de los recursos.
+        - Permisos avanzados por rol (Administrador, Moderador, Usuario) están preparados para futuras versiones.
+
+        **Autenticación:**
+        - Obtén tu token en `/api/token/` usando nombre_usuario y contraseña.
+        - Usa el token en el header: `Authorization: Bearer <tu_token>`
+        
+        **Swagger:**
+        - Puedes probar los endpoints protegidos usando el botón "Authorize" arriba e ingresando tu token JWT.
+        """,
         contact=openapi.Contact(email="soporte@memoriaviva.ni"),
     ),
     public=True,

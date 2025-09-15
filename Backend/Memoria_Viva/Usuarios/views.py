@@ -25,16 +25,25 @@ class LogoutView(APIView):
 from django.shortcuts import render
 
 
-from rest_framework import generics
+
+from rest_framework import generics, permissions
+from .permissions import IsAdmin, IsModerator, IsOwnerOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Usuario
 from .serializers import UsuarioSerializer
 
+
 # Vista para listar y crear usuarios
+# NOTA: Para lógica avanzada de permisos por rol, usar IsAdmin, IsModerator, IsOwnerOrReadOnly
 class UsuarioListCreateView(generics.ListCreateAPIView):
 	queryset = Usuario.objects.all()
 	serializer_class = UsuarioSerializer
+    
+	def get_permissions(self):
+		if self.request.method == 'GET':
+			return [permissions.AllowAny()]
+		return [permissions.IsAuthenticated()]
     
 	def create(self, request, *args, **kwargs):
 		"""
@@ -43,6 +52,12 @@ class UsuarioListCreateView(generics.ListCreateAPIView):
 		return super().create(request, *args, **kwargs)
 
 # Vista para obtener, actualizar o eliminar un usuario específico
+# NOTA: Para lógica avanzada de permisos por rol, usar IsAdmin, IsModerator, IsOwnerOrReadOnly
 class UsuarioRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Usuario.objects.all()
 	serializer_class = UsuarioSerializer
+
+	def get_permissions(self):
+		if self.request.method == 'GET':
+			return [permissions.AllowAny()]
+		return [permissions.IsAuthenticated()]

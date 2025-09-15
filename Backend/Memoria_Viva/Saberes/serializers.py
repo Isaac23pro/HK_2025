@@ -14,6 +14,16 @@ class SaberPopularSerializer(serializers.ModelSerializer):
         model = SaberPopular
         fields = '__all__'
 
+    def validate_titulo(self, value):
+        if not value or len(value) < 5:
+            raise serializers.ValidationError("El título debe tener al menos 5 caracteres.")
+        return value
+
+    def validate(self, data):
+        if data.get('estado') == 'Aprobado' and not data.get('aprobado_por'):
+            raise serializers.ValidationError("Debe indicar quién aprueba el saber.")
+        return data
+
 # Serializador para ComentarioSaber
 class ComentarioSaberSerializer(serializers.ModelSerializer):
     class Meta:

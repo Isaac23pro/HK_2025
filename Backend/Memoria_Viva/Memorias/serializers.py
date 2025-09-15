@@ -24,6 +24,17 @@ class MemoriaSerializer(serializers.ModelSerializer):
             'fecha_creacion', 'estado', 'aprobado_por', 'fecha_aprobacion', 'es_publico', 'activo'
         ]
 
+    def validate_titulo(self, value):
+        if not value or len(value) < 5:
+            raise serializers.ValidationError("El título debe tener al menos 5 caracteres.")
+        return value
+
+    def validate(self, data):
+        # Ejemplo: Solo usuarios con rol admin o moderador pueden aprobar memorias
+        if data.get('estado') == 'Aprobado' and not data.get('aprobado_por'):
+            raise serializers.ValidationError("Debe indicar quién aprueba la memoria.")
+        return data
+
 # Serializador para Medio
 class MedioSerializer(serializers.ModelSerializer):
     class Meta:
